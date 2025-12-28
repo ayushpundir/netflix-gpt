@@ -1,8 +1,9 @@
+import Body from "./Components/Body";
 function App() {
 
   return (
-    <div></div>
+    <Body/>
   )
 }
 
-export default App
+export default App;
