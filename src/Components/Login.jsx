@@ -1,12 +1,68 @@
+import { checkValidData } from "../utils/validate";
 import Header from "./Header";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"; // from firebase docs
+import { auth} from "../utils/firebase"; // import auth from firebase.js
+
 
 const Login = () => {
     const [isSignInForm, setIsSignInForm] = useState(true);
+	const [errorMessage, setErrorMessage] = useState(null);
+
+	const email = useRef(null); // it will create a reference and now will refer it to input box
+	const password = useRef(null);
+	const name = useRef(null);
 
     const toggleSignInForm = () => {
         setIsSignInForm(!isSignInForm);
     };
+
+	const handleButtonClick = () => {
+		// 1. Safely get the name value (only if it exists)
+		const nameValue = name.current?.value || null; //if name input box is not there then it will be null
+		const emailValue = email.current.value;
+		const passwordValue = password.current.value;
+
+		// 2. Pass values to your validation function
+		const message = checkValidData(nameValue, emailValue, passwordValue);
+		
+		setErrorMessage(message);
+
+		if (message) return; // If there's an error, stop here
+
+		// Proceed to Firebase Sign In / Sign Up logic...
+		if(!isSignInForm){
+			// Sign Up Logic
+			createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+			.then((userCredential) => {
+				// Signed up 
+				const user = userCredential.user;
+				// ...
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				// ..
+				setErrorMessage(error.code + ": " + error.message);
+			});
+
+		}
+		else{
+			// Sign In Logic
+			signInWithEmailAndPassword(auth, emailValue, passwordValue)
+			.then((userCredential) => {
+				// Signed in 
+				const user = userCredential.user;
+				// ...
+				console.log(user);
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				setErrorMessage(error.code + ": " + error.message);
+			});
+			}
+			};
 
     return (
         <div className="relative min-h-screen">
@@ -23,13 +79,14 @@ const Login = () => {
 
             {/* Form Wrapper */}
             <div className="flex justify-center items-center min-h-screen px-4">
-                <form className="w-full max-w-md bg-black/80 p-10 text-white rounded-lg">
+                <form onSubmit={(e) => e.preventDefault()} className="w-full max-w-md bg-black/80 p-10 text-white rounded-lg">
                     <h1 className="font-bold text-3xl mb-6">
                         {isSignInForm ? "Sign In" : "Sign Up"}
                     </h1>
 
                     {!isSignInForm && (
                         <input
+							ref ={name}
                             type="text"
                             placeholder="Full Name"
                             className="p-4 mb-4 w-full bg-gray-700 rounded"
@@ -37,18 +94,20 @@ const Login = () => {
                     )}
 
                     <input
+						ref ={email}
                         type="text"
                         placeholder="Email Address"
                         className="p-4 mb-4 w-full bg-gray-700 rounded"
                     />
 
                     <input
+						ref ={password}
                         type="password"
                         placeholder="Password"
                         className="p-4 mb-6 w-full bg-gray-700 rounded"
                     />
-
-                    <button className="p-4 mb-4 bg-red-700 w-full rounded-lg font-semibold">
+					<p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
+                    <button className="p-4 mb-4 bg-red-700 w-full rounded-lg font-semibold" onClick={handleButtonClick}>
                         {isSignInForm ? "Sign In" : "Sign Up"}
                     </button>
 
