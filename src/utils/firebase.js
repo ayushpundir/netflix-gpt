@@ -8,14 +8,15 @@ import { getAuth } from "firebase/auth"; // from firebase docs
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Vite uses import.meta.env to access environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyBL1UM_oB8AB-IEHiKRkpN5QICNkwAZkdE",
-  authDomain: "netflixgpt-17560.firebaseapp.com",
-  projectId: "netflixgpt-17560",
-  storageBucket: "netflixgpt-17560.firebasestorage.app",
-  messagingSenderId: "756454625166",
-  appId: "1:756454625166:web:4bd63e182fd90582f71edf",
-  measurementId: "G-428397GYJK"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
