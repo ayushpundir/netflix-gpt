@@ -3,7 +3,6 @@ import Header from "./Header";
 import { useState, useRef } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"; // from firebase docs
 import { auth} from "../utils/firebase"; // import auth from firebase.js
-import { useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
@@ -12,7 +11,6 @@ import { addUser } from "../utils/userSlice";
 const Login = () => {
     const [isSignInForm, setIsSignInForm] = useState(true);
 	const [errorMessage, setErrorMessage] = useState(null);
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
 	const email = useRef(null); // it will create a reference and now will refer it to input box
@@ -45,7 +43,7 @@ const Login = () => {
 				const user = userCredential.user;
 				// ...
                 updateProfile(user, {
-                displayName: nameValue, photoURL: "https://avatars.githubusercontent.com/u/122226043?s=400&u=34e4aa4731e7508c5935a85de85c23ba6ab1ab13&v=4"
+                displayName: nameValue, photoURL: "userIcon.png"
                 }).then(() => {
                 // Profile updated!
                 // ...
@@ -56,8 +54,6 @@ const Login = () => {
                 email.current.value = "";
                 password.current.value = "";
                 if(name.current) name.current.value = "";
-
-                navigate("/browse")
 
                 }).catch((error) => {
                 // An error occurred
@@ -84,7 +80,6 @@ const Login = () => {
 				//console.log(user);
                 email.current.value = "";
                 password.current.value = "";
-                navigate("/browse");
 			})
 			.catch((error) => {
 				const errorCode = error.code;
