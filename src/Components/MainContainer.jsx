@@ -2,17 +2,34 @@ import { useSelector } from "react-redux";
 import VideoBackground from "./VideoBackground";
 import VideoTitle from "./VideoTitle";
 
+// const MainContainer = () => {
+//   const movies = useSelector((store) => store.movies?.nowPlayingMovies);
+
+//   if (!movies) return; // render nothing if movies are not loaded yet
+
+//   const mainMovie = movies[0];
+
+//   const { original_title, overview, id } = mainMovie;
+
+//   return (
+//     <div className="pt-[30%] bg-black md:pt-0">
+//       <VideoTitle title={original_title} overview={overview} />
+//       <VideoBackground movieId={id} />
+//     </div>
+//   );
+// };
+// export default MainContainer;
 const MainContainer = () => {
   const movies = useSelector((store) => store.movies?.nowPlayingMovies);
 
-  if (!movies) return; // render nothing if movies are not loaded yet
+  if (!movies) return null;
 
   const mainMovie = movies[0];
-
   const { original_title, overview, id } = mainMovie;
 
   return (
-    <div className="pt-[30%] bg-black md:pt-0">
+    // REMOVED pt-[30%] - This was the main cause of the gap
+    <div className="relative w-full bg-black overflow-hidden">
       <VideoTitle title={original_title} overview={overview} />
       <VideoBackground movieId={id} />
     </div>

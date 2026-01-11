@@ -1,62 +1,112 @@
+// import { signOut } from "firebase/auth";
+// import { auth } from "../utils/firebase";
+// import { useNavigate } from "react-router-dom";
+// import { useSelector } from "react-redux";
+// import { useEffect } from "react";
+// import { onAuthStateChanged } from "firebase/auth";
+// import { useDispatch } from "react-redux";
+// import { addUser, removeUser } from "../utils/userSlice";
+// const Header = () => {
+
+
+//     const user = useSelector((store) => store.user);
+
+//     const dispatch = useDispatch();
+//     const navigate = useNavigate();
+
+//     const handleSignOut = () => {
+//         // Sign out logic here
+//         signOut(auth).then(() => {
+//         // Sign-out successful.        
+//         }).catch((error) => {
+//         // An error happened.
+//         });
+//     }
+
+//     useEffect(() => {
+//         const unsubscribe = onAuthStateChanged(auth, (user) => {
+//         if (user) {
+//             // User is signed in, see docs for a list of available properties
+//             // https://firebase.google.com/docs/reference/js/auth.user
+//             const uid = user.uid;
+//             // ...
+//             dispatch(addUser({uid : uid, email: user.email, displayName: user.displayName, photoURL: user.photoURL}));
+//             navigate("/browse");
+//             } else {
+//                 // User is signed out
+//                 // ...
+//                 dispatch(removeUser());
+//                 navigate("/");
+//             }
+//         });
+
+//         return () => unsubscribe(); // when the component unmounts this removes the listener
+//     }, []);
+
+//     return (
+//     <div className="absolute w-screen px-8 py-2 bg-linear-to-b from-black z-10 flex justify-between">
+//         <img className = "w-44"
+//         src="/Netflix_Logo_PMS.png"
+//         alt="LOGO" />
+
+//         {user && (<div className="flex p-2">
+//             <img
+//             className = "w-12 h-12 "
+//             src = {user.photoURL}
+//             alt="userIcon" />
+//             <button onClick={handleSignOut} className="font-bold text-white">Sign out</button>
+//         </div>)}
+//     </div>
+//     );
+// };
+// export default Header;
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+
 const Header = () => {
-
-
     const user = useSelector((store) => store.user);
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleSignOut = () => {
-        // Sign out logic here
-        signOut(auth).then(() => {
-        // Sign-out successful.        
-        }).catch((error) => {
-        // An error happened.
-        });
-    }
+        signOut(auth).catch((error) => console.error(error));
+    };
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            const uid = user.uid;
-            // ...
-            dispatch(addUser({uid : uid, email: user.email, displayName: user.displayName, photoURL: user.photoURL}));
-            navigate("/browse");
+            if (user) {
+                const { uid, email, displayName, photoURL } = user;
+                dispatch(addUser({ uid, email, displayName, photoURL }));
+                navigate("/browse");
             } else {
-                // User is signed out
-                // ...
                 dispatch(removeUser());
                 navigate("/");
             }
         });
-
-        return () => unsubscribe(); // when the component unmounts this removes the listener
+        return () => unsubscribe();
     }, []);
 
     return (
-    <div className="absolute w-screen px-8 py-2 bg-linear-to-b from-black z-10 flex justify-between">
-        <img className = "w-44"
-        src="/Netflix_Logo_PMS.png"
-        alt="LOGO" />
+        <div className="absolute w-full px-8 py-4 bg-linear-to-b from-black z-30 flex flex-col md:flex-row justify-between items-center">
+            <img className="w-44 mb-4 md:mb-0" src="/Netflix_Logo_PMS.png" alt="LOGO" />
 
-        {user && (<div className="flex p-2">
-            <img
-            className = "w-12 h-12 "
-            src = {user.photoURL}
-            alt="userIcon" />
-            <button onClick={handleSignOut} className="font-bold text-white">Sign out</button>
-        </div>)}
-    </div>
+            {user && (
+                <div className="flex items-center gap-4 bg-black/30 p-2 rounded-lg backdrop-blur-sm">
+                    <img className="w-10 h-10 rounded-md object-cover border border-gray-600" src={user.photoURL} alt="userIcon" />
+                    <button 
+                        onClick={handleSignOut} 
+                        className="font-semibold text-white bg-red-600 px-4 py-2 rounded-md hover:bg-red-700 transition-colors duration-200 shadow-lg"
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            )}
+        </div>
     );
 };
 export default Header;
