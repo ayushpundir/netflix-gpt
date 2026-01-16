@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 const GptSearchPage = () => {
 
   const loading = useSelector((store) => store.gpt.loading);
+  const error = useSelector((store) => store.gpt.error);
 
   return (
     <div className="relative min-h-screen flex flex-col">
@@ -22,6 +23,9 @@ const GptSearchPage = () => {
 
       <div className="pt-[30%] md:pt-[10%] flex flex-col items-center w-full">
         <GptSearchBar />
+        {error && (
+          <p className="text-red-500 text-center mt-4 font-medium">{error}</p>
+        )}
         <div className="w-full flex justify-center min-w-0">
           {loading ? <GptShimmer /> : <RecommendedMovies />}
         </div>
