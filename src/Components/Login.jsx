@@ -43,7 +43,7 @@ const Login = () => {
 				const user = userCredential.user;
 				// ...
                 updateProfile(user, {
-                displayName: nameValue, photoURL: "userIcon.png"
+                displayName: nameValue, photoURL: "/userIcon.png"
                 }).then(() => {
                 // Profile updated!
                 // ...
