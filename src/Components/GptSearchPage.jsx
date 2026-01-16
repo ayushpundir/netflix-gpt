@@ -20,9 +20,11 @@ const GptSearchPage = () => {
         <div className="absolute inset-0 bg-black/60"></div>
       </div>
 
-      <div className="pt-[30%] md:pt-[10%] flex flex-col items-center">
+      <div className="pt-[30%] md:pt-[10%] flex flex-col items-center w-full">
         <GptSearchBar />
-        {loading ? <GptShimmer /> : <RecommendedMovies />}
+        <div className="w-full flex justify-center min-w-0">
+          {loading ? <GptShimmer /> : <RecommendedMovies />}
+        </div>
       </div>
     </div>
   );
