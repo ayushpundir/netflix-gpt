@@ -34,15 +34,10 @@ const Header = () => {
                 // User is signed out
                 dispatch(removeUser());
                 
-                // clear gpt movie results on sign out
+                // Clear GPT state completely on sign out
                 dispatch(clearGptMovieResult());
                 
                 navigate("/");
-                
-                // Turn off the GPT view if it was open
-                if(showGptSearch){
-                    dispatch(toggleGptSearchView());
-                }
             }
         });
         return () => unsubscribe();
