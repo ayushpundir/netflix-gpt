@@ -60,7 +60,7 @@ const GptSearchBar = () => {
 
       if (!gptResponse) {
           console.error("No response from AI");
-          // we can dispatch a "failure" action here to stop loading if needed
+          dispatch(setGptError("No response from AI"));
           return;
       }
 
